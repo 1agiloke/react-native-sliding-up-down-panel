@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 const { width, height } = Dimensions.get('window');
+const clickRange = 20;
 let sliderPosition = 0;
 
 const styles = StyleSheet.create({
@@ -105,7 +106,7 @@ export default class SlidingPanel extends Component {
         }
         
         if(this.props.allowAnimation) {
-          if(a === 0 || (this.props.panelPosition === 'bottom' ? gesture.vy < -1 : gesture.vy > 1)) {
+          if(Math.abs(a) < clickRange || (this.props.panelPosition === 'bottom' ? gesture.vy < -1 : gesture.vy > 1)) {
             if(sliderPosition < ( this.props.slidingPanelLayoutHeight ? this.props.slidingPanelLayoutHeight : height-this.props.headerLayoutHeight)) {
               sliderPosition = ( this.props.slidingPanelLayoutHeight ? this.props.slidingPanelLayoutHeight : height-this.props.headerLayoutHeight)
               this.props.onAnimationStart();
