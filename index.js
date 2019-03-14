@@ -101,9 +101,7 @@ export default class SlidingPanel extends Component {
       },
       onPanResponderRelease        : (e, gesture) => {
         sliderPosition = sliderPosition + a
-        if(a !== 0) {
-          this.props.onDragStop(e, gesture)
-        }
+        
         
         if(this.props.allowAnimation) {
           if(Math.abs(a) < clickRange || (this.props.panelPosition === 'bottom' ? gesture.vy < -1 : gesture.vy > 1)) {
@@ -130,7 +128,7 @@ export default class SlidingPanel extends Component {
               ).start(() => this.props.onAnimationStop()); 
             }
           }
-          if(this.props.panelPosition === 'bottom' ? gesture.vy > 1 : gesture.vy < -1) {
+          else if(this.props.panelPosition === 'bottom' ? gesture.vy > 1 : gesture.vy < -1) {
             sliderPosition = 0
             this.props.onAnimationStart();
             Animated.timing(
@@ -140,7 +138,13 @@ export default class SlidingPanel extends Component {
                 duration: this.props.AnimationSpeed,
               }
             ).start(() => this.props.onAnimationStop());
+          } else {
+            if(a !== 0) {
+              this.props.onDragStop(e, gesture)
+            }
           }
+        } else if(a !== 0) {
+          this.props.onDragStop(e, gesture)
         }
       },
     });
