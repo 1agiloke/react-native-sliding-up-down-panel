@@ -40,7 +40,7 @@ const SlidingPanelIOS = (props) => (
             {...props.panResponder} style={{height: props.headerPanelHeight,}}>   
       {props.headerView()}
     </Animated.View>
-    <View style={props.panelPosition === 'bottom' ? {top: props.headerPanelHeight, left: 0, position: 'absolute',} : {bottom: props.headerPanelHeight, left: 0, position: 'absolute',}}>
+    <View style={props.panelPosition === 'bottom' ? {top: props.headerPanelHeight, left: 0, position: 'absolute',} : {height: props.heightAnim, overflow:'hidden', bottom: props.headerPanelHeight, left: 0, position: 'absolute',}}>
       {props.slidingPanelView()}
     </View>
   </Animated.View>
@@ -52,7 +52,7 @@ const SlidingPanelAndroid = (props) => (
             {...props.panResponder} style={{height: props.headerPanelHeight,}}>   
       {props.headerView()}
     </Animated.View>
-    <Animated.View style={props.panelPosition === 'bottom' ? {top: props.headerPanelHeight, left: 0, position: 'absolute',} : {bottom: props.headerPanelHeight, left: 0, position: 'absolute',}}>
+    <Animated.View style={props.panelPosition === 'bottom' ? {top: props.headerPanelHeight, left: 0, position: 'absolute',} : {height: props.heightAnim, overflow:'hidden', bottom: props.headerPanelHeight, left: 0, position: 'absolute',}}>
       {props.slidingPanelView()}
     </Animated.View>
   </Animated.View>
@@ -94,7 +94,8 @@ export default class SlidingPanel extends Component {
               this.state.heightAnim.setValue(sliderPosition + a)
             }
             else {
-              this.state.heightAnim.setValue(a)
+              if(a>0 || this.props.panelPosition === 'bottom')
+                this.state.heightAnim.setValue(a)
             }
           }
         }
@@ -176,7 +177,7 @@ export default class SlidingPanel extends Component {
 
   render() {
     return (
-      <View style={this.props.panelPosition === 'bottom' ? {position: 'absolute', bottom: 0} : {position: 'absolute', top: 0}}>
+      <View style={this.props.panelPosition === 'bottom' ? {position: 'absolute', bottom: this.props.posOffset?this.props.posOffset:0} : {position: 'absolute', top: this.props.posOffset?this.props.posOffset:0}}>
         {
           Platform.OS === 'ios' && this.props.visible === true ?
             <SlidingPanelIOS
